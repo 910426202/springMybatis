@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd" >
+<configuration>
+    <settings>
+        <!--控制mybatis行为的属性信息-->
+        <setting name="lazyLoadingEnabled" value="false"/>
+    </settings>
+
+    <!--使用别名可以避免输入类的全路径-->
+    <typeAliases>
+        <!--定义类的别名，在UserMapper映射文件中就可以通过别名代替类全路径名-->
+        <typeAlias type="Entity.User" alias="User"/>
+    </typeAliases>
+
+    <!--使用p:mapperLocations可以消除这里的mapper映射配置-->
+    <!--<mappers>-->
+        <!--&lt;!&ndash;SQL映射文件&ndash;&gt;-->
+        <!--<mapper resource="/mappers/UserMapper.xml"/>-->
+    <!--</mappers>-->
+</configuration>

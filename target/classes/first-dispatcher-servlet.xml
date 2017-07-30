@@ -1,0 +1,32 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!--这个注解驱动一定要使用mvc的xmlns-->
+    <mvc:annotation-driven/>
+    <context:component-scan base-package="Controller"/>
+
+    <!--基于@基于aspectj的切面驱动器:创建aspect bean，完成切面织入-->
+    <aop:aspectj-autoproxy/>
+    <context:component-scan base-package="Aspect"/>
+
+    <!-- 拦截器 -->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/login" />
+            <bean class="InterCeptor.AuthorityInterceptor" />
+        </mvc:interceptor>
+    </mvc:interceptors>
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+    <!--suffix如果为空则自己指定匹配页面后缀-->
+
+</beans>

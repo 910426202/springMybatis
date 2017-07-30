@@ -1,0 +1,98 @@
+<web-app version="2.4"
+         xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+    <display-name>Spring MVC Application</display-name>
+
+    <!--过滤器-->
+    <filter>
+        <!--过滤器名称-->
+        <filter-name>characterEncodingFilter</filter-name>
+        <!--过滤器的实现类-->
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <!--设置编码格式-->
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <!--强制覆盖request.getCharacterEncoding()的编码格式-->
+            <description>字符集编码</description>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <!--过滤器映射，定义过滤器拦截的URL-->
+    <filter-mapping>
+        <!--过滤器名称-->
+        <filter-name>characterEncodingFilter</filter-name>
+        <!-- 负责拦截全部以/开始的请求-->
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- 启动spring容器加载指定配置文件的配置信息-->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <!--指定加载spring配置文件的路径，默认的路径是"/WEB-INF/applicationContext.xml，
+    指定多个配置文件以逗号分隔，支持通配符表达式入context-*.xml,整个加载配置过程由ContextLoader来完成。-->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath*:applicationContext.xml</param-value>
+    </context-param>
+
+    <!--一些静态资源的的拦截例外-->
+    <!--如果你的DispatcherServlet拦截"/"拦截了所有的请求，*.js,*.jpg等静态文件执行例外-->
+    <!--激活Tomcat的defaultServlet来处理静态文件-->
+    <!--性能考虑：要写在DispatcherServlet的前面， 让 defaultServlet先拦截请求，这样请求就不会进入Spring-->
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.jpg</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>*.gif</url-pattern>
+    </servlet-mapping>
+
+    <!--分发servlet可以配置多个,将拦截到的URL交给controller-->
+    <servlet>
+        <!--servlet名称-->
+        <servlet-name>first-dispatcher</servlet-name>
+        <!--servlet的执行类，可自定义继承自HttpServlet-->
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <!--指定servlet的配置文件，默认框架在WEfirst-dispatcherB-INF文件夹下寻找名为[servlet-name]-servlet.xml 的配置文件-->
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <!--其中<param-value>**.xml</param-value> 这里可以使用多种写法-->
+            <!--1、不写,使用默认值:/WEB-INF/<servlet-name>-servlet.xml-->
+            <!--2、<param-value>/WEB-INF/classes/dispatcher-servlet.xml</param-value>-->
+            <!--3、<param-value>classpath*:dispatcher-servlet.xml</param-value>-->
+            <!--4、多个值用逗号分隔-->
+            <param-value>classpath:first-dispatcher-servlet.xml</param-value>
+        </init-param>
+        <!--指定servlet的启动顺序，本servlet第一个启动-->
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <!--servlet名称要匹配-->
+        <servlet-name>first-dispatcher</servlet-name>
+        <!--会拦截URL中带“/”的请求。-->
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!--首页， controller映射了/也只以此处的welcomefile为准-->
+    <welcome-file-list>
+        <welcome-file>/WEB-INF/views/hello.jsp</welcome-file>
+    </welcome-file-list>
+    <!--当系统出现404错误，跳转到页面nopage.html-->
+    <!--<error-page>-->
+        <!--<error-code>404</error-code>-->
+        <!--<location>404.jsp</location>-->
+    <!--</error-page>-->
+
+    <!--会话超时配置，单位分钟-->
+    <!--<session-config>-->
+        <!--<session-timeout>60</session-timeout>-->
+    <!--</session-config>-->
+</web-app>

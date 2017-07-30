@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--suppress ALL -->
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.0.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+    <!--<context:component-scan base-package=""/>-->
+    <context:component-scan base-package="Service"/>
+    <context:component-scan base-package="MapperInterface"/>
+
+    <!--这个注解驱动一定要使用mvc的xmlns-->
+    <!--<mvc:annotation-driven>-->
+        <!--&lt;!&ndash;完成响应中POJO到json的转换&ndash;&gt;-->
+        <!--<mvc:message-converters>-->
+            <!--<bean class="org.springframework.http.converter.StringHttpMessageConverter"/>-->
+            <!--<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>-->
+        <!--</mvc:message-converters>-->
+    <!--</mvc:annotation-driven>-->
+
+    <!--加载资源文件-->
+    <context:property-placeholder location="classpath:jdbc.properties"/>
+
+    <!--org.apache.commons.dbcp.BasicDataSource-->
+    <!--org.apache.tomcat.jdbc.pool.DataSource-->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+          destroy-method="close"
+          p:driverClassName="${jdbc.driverClassName}"
+          p:url="${jdbc.url}"
+          p:username="${jdbc.username}"
+          p:password="${jdbc.password}"/>
+          <!--p:driverClassName="com.mysql.jdbc.Driver"-->
+          <!--p:url="jdbc:mysql://localhost:3306/test"-->
+          <!--p:username="root"-->
+          <!--p:password=""/>-->
+
+
+
+    <!--以spring容器bean来启动sql会话-->
+    <!--configLocation注入mybatis配置文件-->
+    <!--可以在这里指定mapper文件从而消除mybatis配置文件p:mapperLocations="classpath:mappers/*.xml-->
+    <bean id="sqlSessionFactory"
+          class="org.mybatis.spring.SqlSessionFactoryBean"
+          p:dataSource-ref="dataSource"
+          p:configLocation="classpath:mybatis-config.xml"
+          p:mapperLocations="classpath:mappers/*Mapper.xml"/>
+
+    <!--模板类访问数据库-->
+    <bean class="org.mybatis.spring.SqlSessionTemplate">
+        <constructor-arg ref="sqlSessionFactory"/>
+    </bean>
+
+    <!--将映射接口直接转换为spring bean,basePackage指定映射接口所在的包-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+          p:basePackage="MapperInterface"/>
+    <!--这个属性会导致jdbc.properties读取异常数据库链接不上,spring4弃用该属性,具体参见http://songjianyong.iteye.com/blog/1663170-->
+    <!--p:sqlSessionFactory-ref="sqlSessionFactory"-->
+
+</beans>

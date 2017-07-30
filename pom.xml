@@ -1,0 +1,196 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <!--pom的版本-->
+    <modelVersion>4.0.0</modelVersion>
+    <!--项目组织标识-->
+    <groupId>root</groupId>
+    <!--项目版本号-->
+    <version>1.0</version>
+    <!--项目名称-->
+    <artifactId>springMybatis</artifactId>
+    <!-- 项目打包的格式，可以为：pom , jar , maven-plugin , ejb , war , ear , rar , par-->
+    <packaging>war</packaging>
+
+    <!--<modules>-->
+    <!--聚合多个摸块-->
+    <!--<module>module-name</module>-->
+    <!--</modules>-->
+
+    <!-- 为pom定义一些常量，在pom中的其它地方可以直接引用 使用方式 如下 ：${spring.version} -->
+    <properties>
+        <!-- spring版本号 -->
+        <spring.version>4.3.9.RELEASE</spring.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+            <!--为了使用log4j关闭spring-core中的commons-logging-->
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+            </exclusions>
+            <!--生命周期属性scope : compile(default),provided,runtime,test,system-->
+        </dependency>
+        <!--编码格式，加载器依赖的包-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <!--dispatcher-servlet依赖的包-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+
+        <!-- mybatis核心包 -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>3.4.4</version>
+        </dependency>
+        <!-- mybatis/spring包 -->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis-spring</artifactId>
+            <version>1.3.1</version>
+        </dependency>
+
+        <!--数据库-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+            <version>4.3.9.RELEASE</version>
+        </dependency>
+        <!-- 导入Mysql数据库链接jar包 -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>5.1.30</version>
+        </dependency>
+
+        <!--dbcp.BasicDataSource需要的jar包-->
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>1.4</version>
+        </dependency>
+
+        <!--log4j 2.x最小maven包-->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-jcl</artifactId>
+            <version>2.0.1</version>
+        </dependency>
+
+        <!--servlet TOMCAT已经包含了这里设置为provided，否则会出现nullpointerexception-->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>servlet-api</artifactId>
+            <version>6.0.51</version>
+            <scope>provided</scope>
+        </dependency>
+        <!--scope-->
+        <!--* compile，缺省值，适用于所有阶段，会随着项目一起发布。-->
+        <!--* provided，类似compile，期望JDK、容器或使用者会提供这个依赖。如servlet.jar。-->
+        <!--* runtime，只在运行时使用，如JDBC驱动，适用运行和测试阶段。-->
+        <!--* test，只在测试时使用，用于编译和运行测试代码。不会随项目发布。-->
+        <!--* system，类似provided，需要显式提供包含依赖的jar，Maven不会在Repository中查找它。-->
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>jsp-api</artifactId>
+            <version>6.0.48</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--controller返回json支持-->
+        <!--<dependency>-->
+        <!--<groupId>com.fasterxml.jackson.core</groupId>-->
+        <!--<artifactId>jackson-core</artifactId>-->
+        <!--<version>2.4.3</version>-->
+        <!--<type>pom</type>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>com.fasterxml.jackson.core</groupId>-->
+        <!--<artifactId>jackson-databind</artifactId>-->
+        <!--<version>2.4.3</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+        <!--<groupId>com.fasterxml.jackson.core</groupId>-->
+        <!--<artifactId>jackson-annotations</artifactId>-->
+        <!--<version>2.4.3</version>-->
+        <!--</dependency>-->
+
+
+        <!--aop-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>4.3.9.RELEASE</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.8.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.8.9</version>
+        </dependency>
+
+    </dependencies>
+
+    <!--配置仓库-->
+    <repositories>
+        <repository>
+            <id>maven-aliyun</id>
+            <name>maven-aliyun</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+        </repository>
+    </repositories>
+
+    <!-- 设定插件仓库 -->
+    <pluginRepositories>
+        <pluginRepository>
+            <id>maven-aliyun</id>
+            <name>maven-aliyun</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <build>
+        <plugins>
+            <plugin>
+                <!--使用maven编译java的插件，mvn compiler:compile-->
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.6</source>
+                    <target>1.6</target>
+                </configuration>
+            </plugin>
+            <!--<plugin>-->
+            <!--<groupId>org.codehaus.mojo</groupId>-->
+            <!--<artifactId>tomcat-maven-plugin</artifactId>-->
+            <!--<version>1.1</version>-->
+            <!--<configuration>-->
+            <!--<path>/</path>-->
+            <!--<port>8080</port>-->
+            <!--<uriEncoding>UTF-8</uriEncoding>-->
+            <!--</configuration>-->
+            <!--</plugin>-->
+        </plugins>
+    </build>
+
+</project>

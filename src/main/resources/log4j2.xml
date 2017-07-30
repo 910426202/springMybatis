@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--设置log4j2的自身log级别为warn-->
+<!-- OFF（关闭log4j2本身的event信息） > FATAL > ERROR > WARN > INFO > DEBUG > TRACE > ALL -->
+<Configuration status="OFF">
+    <Appenders>
+        <!--Console输出到控制台-->
+        <Console name="Console" target="SYSTEM_OUT">
+            <!--指定日志输出格式-->
+            <!--%p：输出日志信息的优先级，即DEBUG，INFO，WARN，ERROR，FATAL。-->
+            <!--%d：输出日志时间点的日期或时间，默认格式为ISO8601，也可以在其后指定格式，如：%d{yyyy/MM/dd HH:mm:ss,SSS}。-->
+            <!--%r：输出自应用程序启动到输出该log信息耗费的毫秒数。-->
+            <!--%t：输出产生该日志事件的线程名。-->
+            <!--%l：输出日志事件的发生位置，相当于%c.%M(%F:%L)的组合，包括类全名、方法、文件名以及在代码中的行数。例如：test.TestLog4j.main(TestLog4j.java:10)。-->
+            <!--%c：输出日志信息所属的类目，通常就是所在类的全名。-->
+            <!--%M：输出产生日志信息的方法名。-->
+            <!--%F：输出日志消息产生时所在的文件名称。-->
+            <!--%L:：输出代码中的行号。-->
+            <!--%m:：输出代码中指定的具体日志信息。-->
+            <!--%n：输出一个回车换行符，Windows平台为"rn"，Unix平台为"n"。-->
+            <!--%x：输出和当前线程相关联的NDC(嵌套诊断环境)，尤其用到像java servlets这样的多客户多线程的应用中。-->
+            <!--%%：输出一个"%"字符。-->
+            <!--输出信息: 22:07:04.051 [http-8080-2] FATAL loggerName - ///// fatal-->
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <!--默认logger,当没有找到相应名称的logger则使用默认logger-->
+        <Root level="error">
+            <!--引用name-->
+            <AppenderRef ref="Console"/>
+        </Root>
+        <!--日志名称，日志级别debug<info<warn<error，additivity关闭父类logger输出，此处关闭Root输出-->
+        <logger name="loggerName" level="debug" additivity="false">
+            <appender-ref ref="Console"/>
+        </logger>
+    </Loggers>
+</Configuration>

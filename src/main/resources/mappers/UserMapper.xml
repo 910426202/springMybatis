@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<!--命名空间，这个namespace值一定要和mapper类相同.即值等于mpper接口地址-->
+<mapper namespace="MapperInterface.UserMapperDao">
+    <!--SQL语句,命名空间 +id可以定位一个SQL语句，id是映射项名称，这个id一定要和mapper（MapperInterface.UserMapperDap）接口中的方法名一致
+    id可以定位一个SQL语句parameterType指定传入的参数对下类名（可以是别名）,parameterType要和接口中方法参数一致-->
+    <!--resultType是返回类型resultType="Entity.User"指定全类名也可以,这里由于在mybatis-config中定义了User的别名-->
+    <select id="find"  resultType="User" parameterType="int">
+        SELECT
+          USER_ID id,
+          USER_NAME username,
+          BALANCE balance
+          FROM user
+          WHERE USER_ID=#{id}
+    </select>
+
+    <!--id是resultmap的唯一id，type是映射的POJO类-->
+    <resultMap id="queryResult" type="Entity.User">
+        <!--主键才有这个id属性,这里的jdcbtype是数据库中类型(desc 表名),property是POJO中的属性名-->
+        <id column="USER_ID" jdbcType="INTEGER" property="id"/>
+        <result column="USER_NAME" jdbcType="VARCHAR" property="username"/>
+        <result column="BALANCE" jdbcType="VARCHAR" property="balance"/>
+    </resultMap>
+
+    <!--resultMap引用上面的resultMapid，parameterType可以是基本类型也可以是POJO类，
+    也就是说可以查询条件封装在一个类中，这里使用了Entity.User的别名(mybatis-config中配置)-->
+    <select id="query" resultMap="queryResult" parameterType="User">
+        SELECT USER_ID,USER_NAME,BALANCE
+        FROM user
+        WHERE 1=1
+        <!--&quot;&quot;是双引号用于判空,USER_NAME是查询条件的列名,'%' #{username} '%'中的username出自parameterType的属性名-->
+        <if test="username!=null and !&quot;&quot;.equals(username.trim())">
+            and USER_NAME like '%' #{username} '%'
+        </if>
+    </select>
+
+</mapper>
